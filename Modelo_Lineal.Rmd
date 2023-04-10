@@ -1,0 +1,423 @@
+---
+title: "Modelos lineales"
+author: "Dario Alvarado"
+date: "2023-01-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Paquetes
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(parameters)
+library(performance)
+library(AICcmodavg)
+library(bbmle)
+library(sjPlot)
+library(estimatr)
+library(modelbased)
+library(emmeans)
+library(ggeffects)
+library(palmerpenguins)
+library(dabestr)
+```
+
+### Datos
+
+```{r}
+data("penguins")
+head(penguins)
+```
+
+```{r}
+p <- penguins |>
+  drop_na() |>
+  mutate(peso_kg = body_mass_g / 1000)
+head(p)
+```
+
+### Gráfico exploratorio
+
+```{r}
+ggplot(p, aes(peso_kg, flipper_length_mm)) +
+  geom_point() +
+  stat_smooth(method = lm)
+```
+
+### Modelo
+
+**Primero se coloca la variable respuesta (dependiente) y después del `~` se coloca la o las variables predictoras (independientes)**
+
+```{r}
+m1 <- lm(flipper_length_mm ~ peso_kg, data = p)
+```
+
+### Coeficientes del modelo
+
+```{r}
+summary(m1)
+```
+
+*PENDIENTE: cómo cambiar el alpha en un lm*
+
+```{r}
+parameters(m1)
+```
+
+### Rendimiento (ajuste) del modelo
+
+```{r}
+performance(m1)
+```
+
+### Interpretación del modelo:
+
+Se ajustó un modelo lineal con la variable predictora "masa corporal" para la variable respuesta "largo de aleta", el cual mostró una relacion positiva entre las variables, donde por cada aumento de 1 kg en la masa corporal, el tamaño de aleta aumetará 15.19 mm (IC95% = 14.28, 16.11; p <2e-16). El modelo tiene un R² ajustado de 0.76, lo que indica que la masa corporal explica el 76% de la varianza del largo de la aleta en los pingüinos. 
+
+(Todo esto basado en los datos que tenemos)
+
+*Lo más importante es interpretar el coeficiente y el intervalo de confianza*
+
+##### Fórmula de la regresión lineal
+
+$$
+y = a + bx
+$$
+
+```{r}
+y = 137.04 + 15.20 * 10
+y
+```
+
+### Validación del modelo (cumplimiento de supuestos)
+
+```{r, include=FALSE}
+plot(m1)
+```
+
+```{r}
+check_model(m1)
+```
+
+```{r}
+n <- check_normality(m1)
+n
+plot(n)
+```
+
+```{r}
+h <- check_heteroscedasticity(m1)
+h
+plot(h)
+```
+
+### Gráfico del modelo con sjPlot
+
+```{r}
+plot_model(m1, type = "pred", show.data = TRUE,
+           title = "Tamaño de aleta (mm) en relación a la masa corporal (kg)",
+           axis.title = c("Masa corporal (kg)", "Tamaño de aleta (mm)")) 
+```
+
+### Gráfico del modelo con ggplot
+
+```{r}
+ggplot(p, aes(peso_kg, flipper_length_mm)) +
+  stat_smooth(color = "black",
+              method = lm) +
+  geom_point(aes(color = species)) +
+  labs(title = "Relación entre la masa corporal y el tamaño de aleta",
+       subtitle = "Pingüinos del archipielado de Palmer",
+       y = "Tamaño de aleta (mm)",
+       x= "Masa corporal (kg)") +
+  geom_text(aes(5.5,180), label = "y = 137.04 + 15.20x", color = "gray30") +
+  theme_classic() 
+```
+
+### Modelo con variable categórica
+
+```{r}
+m2 <- lm(flipper_length_mm ~ island, data = p)
+```
+
+```{r}
+summary(p)
+```
+
+```{r}
+summary(m2)
+```
+
+```{r}
+209.558 -16.371
+```
+
+```{r}
+medias <- p |>
+  group_by(island) |>
+  summarise(mean(flipper_length_mm))
+medias
+```
+
+
+```{r}
+nres <- check_normality(m2)
+nres
+plot(nres)
+```
+
+
+```{r}
+hvar <- check_homogeneity(m2)
+hvar
+plot(hvar)
+```
+
+### Corrección para la falta de homogeneidad de varianza de los residuales
+
+```{r}
+m2r <- lm_robust(flipper_length_mm ~ island, data = p)
+summary(m2r)
+```
+
+El lm_robust corrige en base a "heteroscedastic-consistent standard errors"
+
+```{r}
+parameters(m2)
+```
+
+```{r}
+parameters(m2r)
+```
+
+### Gráfico de modelo con variable categórica
+
+```{r}
+plot_model(m2r, type = "pred",
+           title = "Tamaño de aleta en relación a las islas",
+           axis.title = c("Isla", "Tamaño de aleta (mm)"))
+```
+
+### Modelos con más de una variable predictora (regresión múltiple)
+
+```{r}
+m3 <- lm(flipper_length_mm ~ species, data = p)
+m4 <- lm(flipper_length_mm ~ species + island, data = p)
+m5 <- lm(flipper_length_mm ~ species + peso_kg, data = p)
+m6 <- lm(flipper_length_mm ~ island + peso_kg, data = p)
+m7 <- lm(flipper_length_mm ~ species + island + peso_kg, data = p)
+m8 <- lm(flipper_length_mm ~ species * peso_kg, data = p)
+```
+
+#### Colinealidad
+
+```{r}
+col <- check_collinearity(m7)
+col
+plot(col)
+```
+
+### Selección de modelos
+
+`aictab()` del paquete `AICmodavg`
+
+```{r}
+modelos <- list(m1, m2, m3, m4, m5, m6, m7, m8)
+nombres <- c("m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8")
+```
+
+```{r}
+aictab(modelos, nombres)
+```
+
+`compare_performance()`
+
+```{r}
+cp <- compare_performance(m1, m2, m3, m4, m5, m6, m7, m8, rank = TRUE)
+cp
+plot(cp)
+```
+
+`AICtab()` del paquete `bbmle`
+
+```{r}
+AICtab(m1, m2, m3, m4, m5, m6, m7, m8, base = TRUE, delta = TRUE, sort = TRUE, weights = TRUE, nobs = 333)
+```
+
+```{r}
+summary(m8)
+```
+
+### Gráfico del modelo con interacción entre una variable categórica (especies) y una numérica (peso_kg)
+
+```{r}
+plot_model(m8, type = "int")
+```
+
+Interpretación del gráfico: El tamaño de la aleta dependerá de la especie y está fuertemente influenciado por el peso de los pingüinos.
+
+```{r}
+m9 <- lm(flipper_length_mm ~ species + peso_kg * bill_length_mm, data = p)
+```
+
+### Gráfico del modelo con interacción entre dos variables numéricas (peso_kg y largo del pico)
+
+```{r}
+plot_model(m9, type = "int")
+```
+
+**Interpretación del gráfico:** Hay una interacción leve entre las variables. Si las líneas son paralelas quiere decir que NO hay interacción. Si las líneas no son paralelas pero no se cruzan, hay una interacción leve. Si las lineas se cruzan hay una interacción más fuerte
+
+```{r}
+parameters(m8)
+```
+
+```{r}
+performance(m8)
+```
+
+### Comparaciones entre los niveles de la variable predictora en un  modelo lineal
+
+`estimate_contrast()` del paquete `modelbased`
+
+```{r}
+estimate_contrasts(m2)
+```
+
+Calculando las medias con `emmeans()`
+
+```{r}
+medias <- emmeans(m2, "island")
+medias
+```
+
+```{r}
+contraste <- pairs(medias)
+contraste
+```
+
+```{r}
+confint(contraste)
+```
+
+```{r}
+plot(contraste) +
+  geom_vline(xintercept = 0)
+```
+
+### Graficar varios modelos en un solo gráfico
+
+#### Con variables predictoras categóricas:
+
+```{r}
+predictm5 <- ggpredict(m5, terms = c("peso_kg","species"))
+predictm5
+predictm6 <- ggpredict(m6, terms = c("peso_kg","island"))
+```
+
+```{r}
+ggplot(predictm5, aes(x, predicted)) +
+  geom_line(aes(linetype=group, color=group)) +
+  geom_ribbon(aes(ymin=conf.low, ymax=conf.high, fill=group), alpha=0.15) +
+  geom_line(data = predictm6, aes(x, predicted, linetype=group, color=group)) +
+  geom_ribbon(data = predictm6, aes(ymin=conf.low, ymax=conf.high, fill=group), alpha=0.15)
+```
+
+#### Con la misma variable predictora pero diferente modelo de acuerdo a la relación que presentan las variables:
+
+```{r}
+datos <- import("datos/meuse.xlsx")
+```
+
+```{r}
+head(datos)
+```
+
+```{r}
+ggplot(datos, aes(dist.m, cadmium)) +
+  geom_point()
+```
+
+```{r}
+mod1 <- lm(cadmium ~ dist.m, data = datos)
+mod2 <- lm(cadmium ~ dist.m + I(dist.m^2), data = datos)
+mod3 <- lm(cadmium ~ dist.m + log(dist.m), data = datos)
+```
+
+```{r}
+plot_model(mod1, type = "pred", show.data = TRUE)
+```
+
+```{r}
+plot_model(mod2, type = "pred", show.data = TRUE)
+```
+
+```{r}
+plot_model(mod3, type = "pred", show.data = TRUE)
+```
+
+
+```{r}
+predm1 <- ggpredict(mod1, terms = "dist.m")
+predm2 <- ggpredict(mod2, terms = "dist.m")
+predm3 <- ggpredict(mod3, terms = "dist.m")
+```
+
+```{r}
+ggplot(predm1, aes(x, predicted)) +
+  geom_point(data = datos, aes(dist.m, cadmium)) +
+  geom_line(aes(linetype="mod1", color="mod1")) +
+  geom_ribbon(aes(ymin=conf.low, ymax=conf.high, fill="mod1"), alpha=0.15) +
+  geom_line(data = predm2, aes(linetype="mod2", color= "mod2")) +
+  geom_ribbon(data = predm2, aes(ymin=conf.low, ymax=conf.high, fill= "mod2"), alpha=0.15) +
+  geom_line(data = predm3, aes(linetype="mod3", color= "mod3")) +
+  geom_ribbon(data = predm3, aes(ymin=conf.low, ymax=conf.high, fill= "mod3"), alpha=0.15) +
+  labs(linetype = "Modelo", color="Modelo", fill="Modelo") +
+  ylim(c(-3,max(datos$cadmium)+1))
+```
+
+```{r}
+parameters(mod1)
+```
+
+```{r}
+parameters(mod2)
+```
+
+
+### Otro ejemplo de modelos con interacción 
+
+```{r}
+library(GLMsData)
+```
+
+```{r}
+data("butterfat")
+grasa_ganado <- butterfat
+head(grasa_ganado)
+```
+
+```{r}
+modint <- lm(Butterfat ~ Breed * Age, data = grasa_ganado)
+```
+
+```{r}
+plot_model(modint, type = "int")
+```
+
+Este gráfico nos muestra que NO hay una clara interacción entre las variables. El contenido de grasa dependerá de la raza del ganado, pero no está tan influenciado por la edad 
+
+
+```{r}
+modint2 <- lm(bill_depth_mm ~ peso_kg * bill_length_mm, data = p)
+```
+
+```{r}
+plot_model(modint2, type = "int")
+```
+
+En este gráfico se aprecia una interacción más fuerte entre las variables predictoras numéricas (las líneas se cruzan). La profundidad del pico es diferente en relación al peso de los pingüinos y está influenciada por el largo del pico. 

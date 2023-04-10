@@ -1,0 +1,138 @@
+---
+title: "GLM_Binomial para proporciones"
+author: "Dario Alvarado"
+date: "2023-01-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Paquetes
+
+```{r, message=FALSE, warning=FALSE}
+library(rio)
+library(knitr)
+library(tidyverse)
+library(parameters)
+library(performance)
+library(bbmle)
+library(sjPlot)
+library(modelbased)
+library(DAAG)
+library(modEvA)
+```
+
+```{r}
+semillas <- import("datos/germinacion.txt") |>
+  mutate_if(is.character, as.factor)
+head(semillas)
+```
+
+Combinar las variables conteo y muestra semillas, para que quede como una proprocion
+
+```{r}
+y <- cbind(semillas$conteo, semillas$muestra-semillas$conteo)
+head(y)
+```
+
+```{r}
+binomial1 <- glm(y ~ orobanche + extracto, data = semillas, family = binomial)
+```
+
+o
+
+```{r}
+binomial1 <- glm(cbind(conteo, muestra-conteo) ~ orobanche + extracto, data = semillas, family = binomial)
+```
+
+```{r}
+summary(binomial1)
+```
+
+```{r}
+parameters(binomial1)
+```
+
+Los coeficientes están en escala logit
+
+```{r}
+plogis(-0.70 + 1.06)
+```
+
+En un modelo binomial también puede haber sobredispersión:
+
+```{r}
+check_overdispersion(binomial1)
+```
+
+### Corrección con la función quasibinomial
+
+```{r}
+binomial1_q <- glm(cbind(conteo, muestra-conteo) ~ orobanche + extracto, data = semillas, family = quasibinomial)
+```
+
+```{r}
+parameters(binomial1_q)
+```
+
+```{r}
+plot_model(binomial1_q, type = "pred")
+```
+
+```{r}
+plogis(-0.70 + 0.27)
+```
+
+```{r}
+plogis(-0.70 + 1.06)
+```
+
+```{r, message=FALSE}
+estimate_response(binomial1_q)
+```
+
+```{r}
+binomial2 <- glm(cbind(conteo, muestra-conteo) ~ orobanche * extracto, data = semillas, family = binomial)
+binomial3 <- glm(cbind(conteo, muestra-conteo) ~ orobanche, data = semillas, family = binomial)
+binomial4 <- glm(cbind(conteo, muestra-conteo) ~ extracto, data = semillas, family = binomial)
+```
+
+```{r, message=FALSE}
+compare_performance(binomial1, binomial2, binomial3, binomial4, rank = TRUE)
+```
+
+```{r}
+check_overdispersion(binomial2)
+```
+
+```{r}
+binomial2_q <- glm(cbind(conteo, muestra-conteo) ~ orobanche * extracto, data = semillas, family = quasibinomial)
+binomial3_q <- glm(cbind(conteo, muestra-conteo) ~ orobanche, data = semillas, family = quasibinomial)
+binomial4_q <- glm(cbind(conteo, muestra-conteo) ~ extracto, data = semillas, family = quasibinomial)
+```
+
+```{r, message=FALSE}
+compare_performance(binomial1_q, binomial2_q, binomial3_q, binomial4_q, rank = TRUE)
+```
+
+```{r}
+check_overdispersion(binomial2)
+```
+
+```{r}
+ICtab(binomial1, binomial2, binomial3, binomial4, base = TRUE, delta = TRUE, weights = TRUE, sort = TRUE, dispersion = 1.862, type = "qAIC")
+```
+
+```{r}
+parameters(binomial2_q)
+```
+
+```{r, message=FALSE}
+estimate_response(binomial2_q)
+```
+
+```{r}
+plot_model(binomial2_q, type = "int")
+```
