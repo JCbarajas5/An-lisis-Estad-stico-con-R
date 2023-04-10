@@ -1,0 +1,512 @@
+pca.parameters <- principal_components(vars, n = 3)
+pca.parameters
+class(pca.parameters)
+export(pca.parameters, "pca_variables.csv")
+export(pca.parameters, "datos/pca_variables.csv")
+summary(pca.parameters)
+plot(pca.parameters, type = "line")
+knitr::opts_chunk$set(echo = TRUE)
+library(rio)
+library(tidyverse)
+library(parameters)
+library(performance)
+library(bbmle)
+library(sjPlot)
+library(modelbased)
+library(DAAG)
+library(modEvA)
+library(rio)
+library(tidyverse)
+library(parameters)
+library(performance)
+library(bbmle)
+library(sjPlot)
+library(modelbased)
+library(DAAG)
+library(modEvA)
+prueba <- import("datos/prueba.xlsx")
+head(prueba)
+prueba <- import("datos/prueba.xlsx") |>
+mutate_if(is.character, as.factor)
+head(prueba)
+modelo <- glm(respuesta ~ var1 + var2, data = prueba, family = binomial)
+summary(modelo)
+plot_model(modelo)
+plot_model(modelo, type = "pred")
+modelo <- glm(respuesta ~ var1 + var2, data = prueba, family = binomial(link = "logit"))
+summary(modelo)
+plot_model(modelo, type = "pred")
+install.packages("nnet")
+library(nnet)
+modelo1 <- multinom(respuesta ~ var1 + var2, data = prueba)
+pred <- predict(modelo1, data = prueba)
+pred
+sumary(pred)
+summary(pred)
+summary(modelo1)
+plot_model(modelo1, type = "pred")
+prueba <- import("datos/prueba.xlsx") |>
+mutate_if(is.character, as.factor)
+head(prueba)
+modelo1 <- multinom(respuesta ~ var1 + var2, data = prueba)
+summary(modelo1)
+plot_model(modelo1, type = "pred")
+pred <- predict(modelo1, data = prueba)
+pred <- predict(modelo1, data = prueba)
+predict(modelo1, data = prueba)
+parameters(modelo1)
+plogis(-80.88 + 2.98 + 15.72)
+plogis(-80.88 + 2.98*39 + 15.72)
+plogis(-80.88 + 2.98*30 + 15.72)
+plogis(-80.88 + 2.98*20 + 15.72)
+plogis(-80.88 + 2.98*28 + 15.72)
+plogis(-80.88 + 2.98*22 + 15.72)
+plogis(-80.88 + 2.98*22 + 16.71)
+plogis(-80.88 + 2.98*28 + 16.71)
+plogis(-80.88 + 2.98*23 + 16.71)
+plot_model(modelo1, type = "pred",
+terms = c("var1", "var2")) +
+theme_bw()
+plot_model(modelo1, type = "pred",
+terms = c("var1", "var2")) +
+theme_classic()
+plot_model(modelo1, type = "pred",
+show.data = TRUE,
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2")) +
+theme_classic() +
+```
+plot_model(modelo1, type = "pred",
+show.data = TRUE,
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2")) +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2")) +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE) +
+theme_classic()
+parameters(modelo1)
+plogis(-80.88 + 2.98*23 + 16.71)
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype=group, color=group, fill=group) +
+theme_classic()
+plot_model(modelo1, type = "pred")
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype=group, color=group, fill=group) +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype = group, color = group, fill = group) +
+labs(linetype = "var2", color = "var2", fill = "var2")
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype = group, color = group, fill = group) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype = group, color = group, fill = group, line.size = 3) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype = group, color = group, fill = group, line.size = 4) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype = group, color = group, fill = group, line.size = 7) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype = group, color = group, fill = group, line.size = 1) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = TRUE) +
+aes(linetype = group, color = group, fill = group, line.size = 0.7) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+se = TRUE,
+ci.lvl = 95) +
+aes(linetype = group, color = group, fill = group, line.size = ) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+line.size = 3) +
+aes(linetype = group, color = group, fill = group) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+line.size = 1.5) +
+aes(linetype = group, color = group, fill = group) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo1, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1", "var2"),
+line.size = 1.1) +
+aes(linetype = group, color = group, fill = group) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+performance(modelo1)
+modelo2 <- multinom(respuesta ~ var1, data = prueba)
+modelo3 <- multinom(respuesta ~ var2, data = prueba)
+modelo4 <- multinom(respuesta ~ var1 * var2, data = prueba)
+compare_performance(modelo1, modelo2, modelo3, modelo4, rank = TRUE)
+parameters(modelo2)
+plot_model(modelo2, type = "pred")
+plot_model(modelo2, type = "pred")
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1.1) +
+aes(linetype = group, color = group, fill = group) +
+labs(linetype = "var2", color = "var2", fill = "var2") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1.1) +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1.1) +
+aes(linecolor = "darkslategray") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1.1) +
+aes(color = "darkslategray") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1) +
+aes(color = "darkslategray") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1) +
+aes(color = "darkslategray") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1) +
+aes(color = "blue") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+terms = c("var1"),
+line.size = 1) +
+aes(color = group) +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1") +
+aes(color = group) +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1") +
+aes(color = "gray") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1",
+colors = "Set1") +
+aes(color = "gray") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1",
+colors = "Set1") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1",
+colors = "Set2") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1",
+colors = "Set3") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1", colors = "gray") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1") +
+theme_classic()
+plot_model(modelo2, type = "pred",
+title = "Modelo para variable respuesta de tres niveles",
+line.size = 1,
+terms = "var1") +
+theme_bw()
+performance(modelo2)
+ICtab(modelo1, modelo2, modelo3, modelo4, base = TRUE, delta = TRUE, sort = TRUE, weights = TRUE, type = "AICc", nobs = 12)
+ICtab(modelo1, modelo2, modelo3, modelo4, base = TRUE, delta = TRUE, sort = TRUE, weights = TRUE, type = "qAICc", nobs = 12)
+ICtab(modelo1, modelo2, modelo3, modelo4, base = TRUE, delta = TRUE, sort = TRUE, weights = TRUE, type = "AICc", nobs = 12)
+performance(modelo4)
+performance(modelo2)
+compare_performance(modelo1, modelo2, modelo3, modelo4, rank = TRUE)
+compare_performance(modelo1, modelo2, modelo3, modelo4)
+compare_performance(modelo1, modelo2, modelo3, modelo4, rank = TRUE)
+check_overdispersion(modelo2)
+check_normality(modelo2)
+check_homogeneity(modelo2)
+check_heteroscedasticity(modelo2)
+performance_hosmer(modelo2)
+AUC(modelo2)
+parameters(modelo2)
+plogis(-70.40 + 2.98*20)
+plogis(-70.40 + 2.98*30)
+plogis(-70.40 + 2.98*22)
+plogis(-70.40 + 2.98*23)
+plogis(-70.40 + 2.98*24)
+estimate_response(modelo2)
+estimate_expectation(modelo2)
+estimate_prediction(modelo2)
+predict(modelo2)
+predict(modelo2, newdata = prueba)
+prediccion <- predict(modelo2, newdata = prueba)
+prediccion
+prediccion <- predict(modelo2, newdata = 23)
+nuevosdatos <- data.frame("var1" = 23)
+nuevosdatos
+prediccion <- predict(modelo2, newdata = nuevosdatos)
+prediccion
+modelo5 <- glm(respuesta ~ var1, data = prueba, family = Gamma)
+performance_roc(modelo2)
+mod5 <- glm(respuesta ~ var1, data = prueba, family = multinomial)
+mod5 <- glm(respuesta ~ var1, data = prueba, family = "multinomial")
+install.packages("exact2x2")
+exact2x2::mcnemar.test(prueba, respuesta, modelo2)
+chisq.test(modelo2)
+performance(modelo2)
+resultado <- chisq.test(prediccion, prueba$respuesta)
+nuevosdatos <- data.frame("var1" = c(23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23)
+nuevosdatos <- data.frame("var1" = c(23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23)
+nuevosdatos <- data.frame("var1" = c(23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23)
+nuevosdatos
+nuevosdatos <- data.frame("var1" = c(23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23)
+prediccion <- predict(modelo2, newdata = nuevosdatos)
+prediccion <- predict(modelo2, newdata = nuevosdatos)
+prediccion
+nuevosdatos <- data.frame("var1" = c(23, 3, 27, 23, 12, 15, 23, 18, 30, 29, 24, 23)
+prediccion <- predict(modelo2, newdata = nuevosdatos)
+prediccion <- predict(modelo2, newdata = nuevosdatos)
+prediccion
+nuevosdatos
+nuevosdatos <- data.frame("var1" = c(23, 3, 27, 23, 12, 15, 23, 18, 30, 29, 24, 23))
+nuevosdatos
+prediccion <- predict(modelo2, newdata = nuevosdatos)
+prediccion
+resultado <- chisq.test(prediccion, prueba$respuesta)
+resultado
+mosaic(resultado)
+library(vcd)
+mosaic(resultado)
+knitr::opts_chunk$set(echo = TRUE)
+tipos <- import("datos/union_tablas/tipos.xlsx") # tabla con los tipos de sitio de muestreo (Fincas de café de sombra, café bajo sol, y parches de bosque)
+library(rio)
+tipos <- import("datos/union_tablas/tipos.xlsx") # tabla con los tipos de sitio de muestreo (Fincas de café de sombra, café bajo sol, y parches de bosque)
+sitios <- import("datos/union_tablas/sitios.xlsx") # tabla con los sitios de muestreo
+dosel <- import("datos/union_tablas/dosel.xlsx") # tabla con alturas de dosel
+head(tipos)
+head(tipos)
+tipos
+sitios
+head(dosel)
+tipos <- import("datos/union_tablas/tipos.xlsx") # tabla con los tipos de sitio de muestreo (Fincas de café de sombra, café bajo sol, y parches de bosque)
+sitios <- import("datos/union_tablas/sitios.xlsx") # tabla con los sitios de muestreo
+dosel <- import("datos/union_tablas/dosel.xlsx") # tabla con alturas de dosel
+tipos
+sitios
+head(dosel)
+#left_join()
+union1 <- left_join(sitios, tipos, by="Tipo")
+library(tidyverse)
+#left_join()
+union1 <- left_join(sitios, tipos, by="Tipo")
+union1
+#inner_join()
+union2 <- inner_join(union1, dosel, by = "Sitio")
+union2
+#right_join()
+union3 <- right_join(union1, dosel, by = "Sitio")
+union3
+#full_join()
+union4 <- full_join(union1, dosel, by = "Sitio")
+union4
+tipos <- import("datos/union_tablas/tipos.xlsx") # tabla con los tipos de sitio de muestreo (Fincas de café de sombra, café bajo sol, y parches de bosque)
+sitios <- import("datos/union_tablas/sitios.xlsx") # tabla con los sitios de muestreo
+dosel <- import("datos/union_tablas/dosel.xlsx") # tabla con alturas de dosel (m) en medidas en cinco puntos diferentes de cada sitio de muestro
+ambientales <- import("datos/union_tablas/ambientales.xlsx") # tabla con mediciones de temperatura (°C) y humedad relativa (%), las mediciones no se pudieron realizar en todos los puntos en algunos sitios de muestreo
+tipos
+sitios
+head(dosel)
+head(ambientales)
+#full_join()
+union1 <- full_join(sitios, tipos, by = "Tipo")
+union1
+union1 <- inner_join(sitios, tipos, by = "Tipo")
+head(union1)
+union1
+union1 <- left_join(sitios, tipos, by = "Tipo")
+union1
+union1 <- rigth_join(sitios, tipos, by = "Tipo")
+union1 <- right_join(sitios, tipos, by = "Tipo")
+union1
+union2 <- full_join(dosel, ambientales, by = "Punto")
+union2
+union2 <- full_join(dosel, ambientales, by = c("Punto", "Sitio"))
+union2
+#inner_join()
+union3 <- inner_join(dosel, ambientales, by = c("Punto", "Sitio"))
+union3
+head(union2)
+head(union2)
+head(union3)
+#left_join()
+union4 <- left_join(dosel, ambientales, by = c("Punto", "Sitio"))
+union4
+#right_join(): conserva todas las observaciones de la segunda tabla y excluye las de la primera que no se comparten con la segunda.
+union5 <- right_join(dosel, ambientales, by = c("Punto", "Sitio"))
+union5
+union6 <- full_join(sitios, tipos, by = "Tipo")
+union6
+union6 <- full_join(union1, union2, by = "Sitio")
+union6
+head(union6)
+summary(union2)
+union2
+union2
+union3
+union4
+union5
+union6
+medidas <- medidas |>
+mutate(Grupos = cut(medidas$altura, breaks = c(min(medidas$altura -1), 150, 160, 170, 180, 190, max(medidas$altura +1)), labels = c("Baja", "Medio Baja", "Media", "Medio Alta", "Alta", "Muy Alta"))) |>
+mutate(Grupos = paste0(Grupos, '-', cut(medidas$peso, breaks = c(min(medidas$peso -1), 50, 70, 80, max(medidas$peso +1)), labels = c("Bajo", "Normal", "Alto", "Muy Alto"))))
+head(medidas)
+medidas <- medidas |>
+mutate(Grupos = cut(medidas$altura, breaks = c(min(medidas$altura -1), 150, 160, 170, 180, 190, max(medidas$altura +1)), labels = c("Baja", "Medio Baja", "Media", "Medio Alta", "Alta", "Muy Alta"))) |>
+mutate(Grupos = paste0(Grupos, "-", cut(medidas$peso, breaks = c(min(medidas$peso -1), 50, 70, 80, max(medidas$peso +1)), labels = c("Bajo", "Normal", "Alto", "Muy Alto"))))
+head(medidas)
+medidas <- rename(medidas, alturaXpeso = Grupos)
+medidas <- medidas |> # `|>` o `%>%` (pipes) sirven para encadenar funciones dirigidas hacia un conjunto de datos.
+mutate(Comp_corp = cut(medidas$IMC, breaks = c(min(medidas$IMC -1), 18.5, 25, 30, max(medidas$IMC +1)), labels = c("Inferior", "Normal", "Superior", "Obesidad")))
+head(medidas)
+# "Comp_corp" es el nombre de nuestra nueva variable; con `cut()` indicamos sobre qué variable se harán los cortes (la variable que tiene los valores específicos); con `breaks =` especificamos esos sitios de corte (los valores (rangos) de nuestra variable para separar los niveles de nuestra nueva variable categórica); y con `labels =` especificamos las etiquetas o nombres de cada nivel para nuestra variable categórica
+#*Importante: El número de etiquetas debe ser igual al número de sitios de corte.
+medidas <- medidas |>
+mutate(Grupos = cut(medidas$altura, breaks = c(min(medidas$altura -1), 150, 160, 170, 180, 190, max(medidas$altura +1)), labels = c("Baja", "Medio Baja", "Media", "Medio Alta", "Alta", "Muy Alta"))) |>
+mutate(Grupos = paste0(Grupos, "-", cut(medidas$peso, breaks = c(min(medidas$peso -1), 50, 70, 80, max(medidas$peso +1)), labels = c("Bajo", "Normal", "Alto", "Muy Alto"))))
+head(medidas)
+# La primera parte del código es igual que el anterior.
+# Para añadir los argumentos de la segunda variable colocamos un pipe (`|>` o `%>%`) para encadenar la siguiente función.
+# En `mutate()` indicamos que la variable es la que ya creamos en la primera parte del código (en este caso, "Grupos =") y `paste0()` será la función que combine las etiquetas de los sitios de corte de la primera variable con las de la segunda variable especificando que se unirán en la variable "Grupos" y el separador de las etiquetas dentro de comillas (" "). El resto de la función es igual que el código anterior especificando los sitios de corte de la segunda variable y las etiquetas que deseamos.
+medidas <- rename(medidas, alturaXpeso = Grupos)
+medidas <- import("datos/medidas_personas.csv")
+head(medidas)
+medidas <- mutate(medidas, IMC = round((peso/(altura/100)^2), digits = 2)) # `round()` es para redondear y `digits =` es para especificar el número de decimales.
+head(medidas)
+medidas <- medidas |> # `|>` o `%>%` (pipes) sirven para encadenar funciones dirigidas hacia un conjunto de datos.
+mutate(Comp_corp = cut(medidas$IMC, breaks = c(min(medidas$IMC -1), 18.5, 25, 30, max(medidas$IMC +1)), labels = c("Inferior", "Normal", "Superior", "Obesidad")))
+head(medidas)
+# "Comp_corp" es el nombre de nuestra nueva variable; con `cut()` indicamos sobre qué variable se harán los cortes (la variable que tiene los valores específicos); con `breaks =` especificamos esos sitios de corte (los valores (rangos) de nuestra variable para separar los niveles de nuestra nueva variable categórica); y con `labels =` especificamos las etiquetas o nombres de cada nivel para nuestra variable categórica
+#*Importante: El número de etiquetas debe ser igual al número de sitios de corte.
+medidas <- medidas |>
+mutate(Grupos = cut(medidas$altura, breaks = c(min(medidas$altura -1), 150, 160, 170, 180, 190, max(medidas$altura +1)), labels = c("Baja", "Medio Baja", "Media", "Medio Alta", "Alta", "Muy Alta"))) |>
+mutate(Grupos = paste0(Grupos, "-", cut(medidas$peso, breaks = c(min(medidas$peso -1), 50, 70, 80, max(medidas$peso +1)), labels = c("Bajo", "Normal", "Alto", "Muy Alto"))))
+head(medidas)
+# La primera parte del código es igual que el anterior.
+# Para añadir los argumentos de la segunda variable colocamos un pipe (`|>` o `%>%`) para encadenar la siguiente función.
+# En `mutate()` indicamos que la variable es la que ya creamos en la primera parte del código (en este caso, "Grupos =") y `paste0()` será la función que combine las etiquetas de los sitios de corte de la primera variable con las de la segunda variable especificando que se unirán en la variable "Grupos" y el separador de las etiquetas dentro de comillas (" "). El resto de la función es igual que el código anterior especificando los sitios de corte de la segunda variable y las etiquetas que deseamos.
+medidas <- rename(medidas, alturaXpeso = Grupos)
+head(medidas)
+dec <- medidas |>
+mutate_if(is.numeric, funs(format(., nsmall = 2, decimal.mark = ",")))
+head(dec)
+knitr::opts_chunk$set(echo = TRUE)
+ggplot(predm1, aes(x, predicted)) +
+geom_point(data = datos, aes(dist.m, cadmium)) +
+geom_line(aes(linetype="mod1", color="mod1")) +
+geom_ribbon(aes(ymin=conf.low, ymax=conf.high, fill="mod1"), alpha=0.15) +
+geom_line(data = predm2, aes(linetype="mod2", color= "mod2")) +
+geom_ribbon(data = predm2, aes(ymin=conf.low, ymax=conf.high, fill= "mod2"), alpha=0.15) +
+geom_line(data = predm3, aes(linetype="mod3", color= "mod3")) +
+geom_ribbon(data = predm3, aes(ymin=conf.low, ymax=conf.high, fill= "mod3"), alpha=0.15) +
+labs(linetype = "Modelo", color="Modelo", fill="Modelo") +
+ylim(c(-3,max(datos$cadmium)+1))
+knitr::opts_chunk$set(echo = TRUE)
+summary(p)
+knitr::opts_chunk$set(echo = TRUE)
+check_zeroinflation(mej1)
+library(agridat)
+library(rio)
+library(knitr)
+library(tidyverse)
+library(parameters)
+library(performance)
+library(bbmle)
+library(sjPlot)
+library(MASS)
+check_zeroinflation(mej1)
